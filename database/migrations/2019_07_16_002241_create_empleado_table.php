@@ -17,7 +17,7 @@ class CreateEmpleadoTable extends Migration
             $table->bigIncrements('id');
             $table->string('nombre');
             $table->string('sexo');   
-            $table->integer('tel');
+            $table->string('tel');
             $table->date('fecha_nacimiento');
             $table->timestamps();
         });

@@ -1,38 +1,85 @@
 @extends('layouts.layout')
 @section('content')
-<div class="jumbotron text-center">
-  <h1>FORMULARIO DE REGISTRO</h1>
-</div>
+<div class="row">
+  <section class="content">
+    <div class="col-md-8 col-md-offset-2">
 
-<div class="row justify-content-center">
-  <div class="col-md-4 offset-md-4">
+
+      <div class="row justify-content-center">
+        <div class="col-md-4 offset-md-4">
+          <!-- avisa al usuario que se ha guardado exitosamente -->
+          @if(Session::has('success'))
+          <div class="alert alert-info">
+              {{Session::get('success')}}
+          </div>
+          @endif
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="pull-left"><h3>Empleados Registrados</h3></div>
+          <div class="pull-right">
+            <div class="btn-group">
+              <a href="{{action('EmpleadoController@create')}}" class="btn btn-info" >Añadir Nuevo Empleado</a>
+            </div>
+          </div>
+          <div class="table-container">
+            <table id="mytable" class="table table-bordred table-striped">
+             <thead>
+               <th>ID</th>
+               <th>Nombre</th>
+               <th>Sexo</th>
+               <th>Telefono</th>
+               <th>Fecha De Nacimiento</th>
+             </thead>
+             <tbody>
+
+              <!-- Ciclo donde se hace referencia a la variable "$empleados" declarada en el index del "EmpleadoController", en el foreach se le asigna los datos que tiene la posicion i que trae la variable y la muestra en pantalla, asi hasta llegar al ultimo registro -->
+              @if($empleados->count())
+              @foreach($empleados as $empleado)  
+              <tr>
+                <td>{{$empleado->id}}</td>
+                <td>{{$empleado->nombre}}</td>
+                <td>{{$empleado->sexo}}</td>
+                <td>{{$empleado->tel}}</td>
+                <td>{{$empleado->fecha_nacimiento}}</td>
+
+                <!---->
+                <td>
+                  <form action="{{action('EmpleadoController@show', $empleado->id)}}" method="GET">
+                  {{csrf_field()}}
+                    <input name="_method" type="hidden" value="SHOW">
+                    <button class="btn btn-success btn-xs" type="submit"><span class="glyphicon glyphicon-list"></span></button>
+                 </td>
+
+                <td>
+                  <a class="btn btn-primary btn-xs" href="" ><span class="glyphicon glyphicon-pencil"></span></a>
+                </td>
+
+                <td>
+                  <form action="" method="post">
+                   {{csrf_field()}}
+                   <input name="_method" type="hidden" value="DELETE">
+ 
+                   <button class="btn btn-danger btn-xs" type="submit"><span class="glyphicon glyphicon-trash"></span></button>
+                </td>
+              </tr>
+               @endforeach 
+               @else <!-- sino hay ningun registro, manda un mensaje -->
+               <tr>
+                <td colspan="8">No hay registro !!</td>
+              </tr>
+              @endif
+
+            </tbody>
+ 
+          </table>
+        </div>
+      </div>
+      {{ $empleados->links() }} <!-- esta direccionando al "paginate(3)" declarado en el index del Controlador -->
+    </div>
   </div>
-  <div class="col-md-4 offset-md-4">
-    <form action="/action_page.php" autocomplete="on">
-      <div class="form-group">
-        <label for="nombre">Nombre Del Empleado:</label>
-        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre">
-      </div>
-      <div class="form-group">
-        <label for="sexo">Sexo:</label>
-      <select class="form-control" id="sexo" name="sexo">
-        <option>Hombre</option>
-        <option>Mujer</option>
-      </select>
-      </div>
-      <div class="form-group">
-        <label for="telefono">Telefono:</label>
-        <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Telefono">
-      </div>
-      <div class="form-group">
-        <label for="fecha_nacimiento">Fecha De Nacimiento:</label>
-        <input type="text" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="Fecha">
-      </div>
-
-      <button type="submit" class="btn btn-primary">ENVIAR</button>
-    </form>
-  </div>
-</div>
-
-
+</section>
+ 
 @endsection
